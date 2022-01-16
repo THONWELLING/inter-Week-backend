@@ -1,6 +1,9 @@
 import { getRepository } from 'typeorm'
 import  md5 from 'crypto-js/md5'
+import { sign } from 'jsonwebtoken'
+
 import { User } from '../../entity/User'
+import authConfig from '../../config/auth'
 
 import { UserSignIn }from './dtos/user.signin.dtos'
 import { UserSignUp }from './dtos/user.signup.dtos'
@@ -11,17 +14,56 @@ export default class UserService {
     const userRepositiry = getRepository(User)
     
     const {email, password} = user
-    const passwordHash =md5(password).toString()
+    const passwordHash = md5(password).toString()
 
     const existUser = await userRepositiry.findOne({where: {email, password}})
     if(!existUser) {
       throw new AppError('User Not Found', 401)
     }
-    return existUser
+    const { secret, expiresIn } = authConfig.jwt
+    const token = sign({
+      firstName: existUser.firstName,
+      lastName: existUser.lastName,
+      accountNumber: existUser.accountNumber,
+      accountDigit: existUser.accountDigit,
+      wallet: existUser.wallet
+     }, secret, {
+       subject: existUser.id,
+       expiresIn,
+     })
+     //@ts-expect-error ignore
+     delete existUser.password
+     return{accessToken: token}
   }
 
   async signup(user: UserSignUp) {
+    const userRepositiry = getRepository(User)
 
+    const existUser = await userRepositiry.findOne({where: {email: user.email}})
+    if(existUser) {
+      throw new AppError('There Is Already a Registered User With This Email', 401)
+    }
+    const userData = {
+      ...user,
+      password: md5(user.password).toString(),
+      wallet: 6000,
+      accountNumber: Math.floor(Math.random() * 999999),
+      accountDigit: Math.floor(Math.random() * 99)
+    }
+    const userCreate = await userRepositiry.save(userData)
+    const { secret, expiresIn } = authConfig.jwt
+     const token = sign({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      accountNumber: userData.accountNumber,
+      accountDigit: userData.accountDigit,
+      wallet: userData.wallet
+     }, secret, {
+       subject: userCreate.id,
+       expiresIn,
+     })
+   
+     return{accessToken: token}
   }
 
 }
