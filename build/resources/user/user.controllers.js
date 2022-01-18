@@ -25,7 +25,9 @@ class UserController {
     }
     signup(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            return res.send('Criando o Usuário');
+            const userService = new user_service_1.default();
+            const user = yield userService.signup(req.body);
+            return res.status(200).send(user);
         });
     }
 }

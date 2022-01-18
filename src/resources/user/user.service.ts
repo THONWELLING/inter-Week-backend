@@ -16,7 +16,8 @@ export default class UserService {
     const {email, password} = user
     const passwordHash = md5(password).toString()
 
-    const existUser = await userRepositiry.findOne({where: {email, password}})
+    const existUser = await userRepositiry.findOne({where: {email, password: passwordHash}})
+    
     if(!existUser) {
       throw new AppError('User Not Found', 401)
     }
@@ -65,5 +66,18 @@ export default class UserService {
    
      return{accessToken: token}
   }
+   async me(user: Partial<User>) {
+    const userRepository = getRepository(User);
+    const currentUser = await userRepository.findOne({where: {id: user.id}})
 
+    if(!currentUser){
+      throw new AppError('User not found', 401);
+    }
+
+    // @ts-expect-error ignore
+    delete currentUser.password
+
+    return currentUser;
+
+  }
 }

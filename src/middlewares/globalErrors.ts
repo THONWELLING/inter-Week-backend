@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express"
 import AppError from '../shared/error/AppError'
 
-const GlobalErrors = (err: Error, request: Request, response: Response, next: NextFunction) => {
+const globalErrors = (err: Error, request: Request, response: Response, next: NextFunction) => {
 
-  if(err instanceof AppError){
+  if(err instanceof AppError) {
     response.status(err.statusCode).json({
       status: 'error',
       message: err.message,
@@ -17,4 +17,4 @@ const GlobalErrors = (err: Error, request: Request, response: Response, next: Ne
   })
 }
 
-export { GlobalErrors }
+export { globalErrors }
