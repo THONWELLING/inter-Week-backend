@@ -85,8 +85,8 @@ export default class UserService {
       throw new AppError('Usuário não encontrado', 401);
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-expect-error
+   
+    //@ts-expect-error ignore
     delete currentUser.password
 
     return currentUser
