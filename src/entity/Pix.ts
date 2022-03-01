@@ -14,7 +14,7 @@ import { User } from'./User'
 @Entity()
 export class Pix {
 
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid') // para gerar um hash no id e evitar que os Ids sejam sequenciais
   id: string
 
   @Column()

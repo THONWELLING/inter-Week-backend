@@ -13,7 +13,6 @@ function globalErrors(err: Error, req: Request, res: Response, next: NextFunctio
 
   return res.status(500).json({
     status: 'error',
-
     message: 'Internal Server Error'
   })
 }

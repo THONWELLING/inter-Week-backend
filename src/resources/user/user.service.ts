@@ -6,17 +6,17 @@ import { sign } from "jsonwebtoken";
 import { User } from "../../entity/User";
 import authConfig from "../../config/auth";
 
-import { UserSignin } from "./dtos/user.signin.dtos";
-import { UserSignup } from "./dtos/user.signup.dtos";
+import { UserSignIn } from "./dtos/user.signin.dtos";
+import { UserSignUp } from "./dtos/user.signup.dtos";
 import AppError from "../../shared/error/AppError";
 
 
 export default class UserService {
-  async signin (user: UserSignin) {
+  async signin (user: UserSignIn) {
     const userRepository = getRepository(User)
 
     const {email, password} = user
-    const passwordHash = MD5(password).toString() // criando um Hash no passord do usuário 
+    const passwordHash = MD5(password).toString() // criando um Hash no passord do usuário Criptografando
 
     const existUser = await userRepository.findOne({where: {email, password: passwordHash}})
     if(!existUser) {
@@ -36,18 +36,18 @@ export default class UserService {
     });
 
       //@ts-expect-error ignore
-      delete existUser.password
+      delete existUser.password //deletando o password para não retornar p usuário
       
       return {accessToken: token}
   }
 
-  async signup(user: UserSignup) {
+  async signup(user: UserSignUp) {
 
     const userRepository = getRepository(User);
 
     const existUser = await userRepository.findOne({where: {email: user.email}})
 
-    if(existUser){
+    if(existUser) {
       throw new AppError('Já Existe Um Usuário Com Esse Email', 401);
     }
 

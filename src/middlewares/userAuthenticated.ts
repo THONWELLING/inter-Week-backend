@@ -5,11 +5,11 @@ import authConfig from "../config/auth";
 import AppError from "../shared/error/AppError";
 
 interface ItokenPlayload {
-    firstName: string;
-    lastName: string;
-    iat: number;
-    exp: number;
-    sub: string;
+  firstName: string;
+  lastName: string;
+  iat: number;
+  exp: number;
+  sub: string;
 }
 
 export default function userAuthentication (req: Request, res: Response, next: NextFunction  ): void {

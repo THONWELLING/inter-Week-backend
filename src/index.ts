@@ -1,11 +1,11 @@
+import 'express-async-errors'
 import express from 'express';
 import {  createConnection } from 'typeorm';
 import { globalErrors } from './middlewares/globalErrors';
 import routes from './routes';
 
 
-createConnection().then(connection=> {
-
+createConnection().then(connection => {
   const app = express()
   const PORT = 3333
 

@@ -2,7 +2,7 @@
 
 
 
-export interface UserSignup {
+export interface UserSignUp {
   firstName: string
   lastName: string
   email: string
