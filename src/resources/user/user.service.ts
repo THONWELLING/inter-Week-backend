@@ -1,14 +1,16 @@
 //Este Arquivo é o Responsável por ir ao Banco de Dados e Retornar p nós  
+
 import { getRepository } from "typeorm";
 import { MD5 } from "crypto-js";
 import { sign } from "jsonwebtoken";
 
-import { User } from "../../entity/User";
-import authConfig from "../../config/auth";
-
 import { UserSignIn } from "./dtos/user.signin.dtos";
 import { UserSignUp } from "./dtos/user.signup.dtos";
+
+import { User } from "../../entity/User";
+import authConfig from "../../config/auth";
 import AppError from "../../shared/error/AppError";
+
 
 
 export default class UserService {

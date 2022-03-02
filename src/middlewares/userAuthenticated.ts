@@ -4,7 +4,7 @@ import authConfig from "../config/auth";
 
 import AppError from "../shared/error/AppError";
 
-interface ItokenPlayload {
+interface ITokenPayload {
   firstName: string;
   lastName: string;
   iat: number;
@@ -13,6 +13,8 @@ interface ItokenPlayload {
 }
 
 export default function userAuthentication (req: Request, res: Response, next: NextFunction  ): void {
+
+  //VALIDAÇÃO DO TOKEN JWT
 
   const authHeader = req.headers.authorization;
 
@@ -25,7 +27,7 @@ export default function userAuthentication (req: Request, res: Response, next: N
   try {
     const decoded = verify(token, authConfig.jwt.secret)
     
-    const {sub, firstName, lastName} = decoded as unknown as ItokenPlayload
+    const {sub, firstName, lastName} = decoded  as ITokenPayload
 
     req.user = {
       id: sub,
@@ -35,9 +37,7 @@ export default function userAuthentication (req: Request, res: Response, next: N
 
     return next()
 
-  } catch {
+  } catch(error) {
     throw new AppError('Token Inválido Ou Expirado', 401)
   }
-  
-
 }

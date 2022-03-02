@@ -1,5 +1,5 @@
 import {  Router } from "express";
-import { UserController } from "../resources/user/user.controller";
+import  UserController  from "../resources/user/user.controller";
 import userAuthenticated from "../middlewares/userAuthenticated";
 
 
